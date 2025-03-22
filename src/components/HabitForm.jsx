@@ -10,6 +10,10 @@ const HabitTracker = () => {
     setHabitTitle("");
   };
 
+  const handleDeleteHabit = (id) => {
+    setHabits(habits.filter((habit) => habit.id !== id));
+  };
+
   return (
     <div>
       <input
@@ -24,6 +28,18 @@ const HabitTracker = () => {
         {habits.map((habit) => (
           <li key={habit.id}>{habit.title}</li>
         ))}
+      </ul>
+
+      <ul>
+        {habits /
+          map((habit) => (
+            <li key={habit.id}>
+              {habit.title}
+              <button onClick={() => handleDeleteHabit(habit.id)}>
+                Delete
+              </button>
+            </li>
+          ))}
       </ul>
     </div>
   );
