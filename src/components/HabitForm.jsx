@@ -5,6 +5,7 @@ const HabitTracker = () => {
   const [habitTitle, setHabitTitle] = useState("");
 
   const handleAddHabit = () => {
+    if (!habitTitle.trim()) return;
     const newHabit = { id: Date.now(), title: habitTitle };
     setHabits([...habits, newHabit]);
     setHabitTitle("");
@@ -26,20 +27,11 @@ const HabitTracker = () => {
 
       <ul>
         {habits.map((habit) => (
-          <li key={habit.id}>{habit.title}</li>
+          <li key={habit.id}>
+            {habit.title}
+            <button onClick={() => handleDeleteHabit(habit.id)}>Delete</button>
+          </li>
         ))}
-      </ul>
-
-      <ul>
-        {habits /
-          map((habit) => (
-            <li key={habit.id}>
-              {habit.title}
-              <button onClick={() => handleDeleteHabit(habit.id)}>
-                Delete
-              </button>
-            </li>
-          ))}
       </ul>
     </div>
   );
