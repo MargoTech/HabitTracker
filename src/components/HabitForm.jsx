@@ -1,4 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+useEffect(() => {
+  const savedHabits = JSON.parse(localStorage.getItem("habits"));
+  if (savedHabits) {
+    setHabits(savedHabits);
+  }
+}, []);
+
+useEffect(() => {
+  localStorage.setItem("habits", JSON.stringify(habits));
+}, [habits]);
 
 const HabitTracker = () => {
   const [habits, setHabits] = useState([]);
