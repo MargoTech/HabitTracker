@@ -1,10 +1,17 @@
 const HabitForm = ({ habitTitle, setHabitTitle, handleAddHabit }) => {
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleAddHabit();
+    }
+  };
+
   return (
     <div className="flex flex-col items-center w-full max-w-md">
       <input
         type="text"
         value={habitTitle}
         onChange={(e) => setHabitTitle(e.target.value)}
+        onKeyDown={handleKeyDown}
         placeholder="Add habit"
         className="border border-blue-500 p-2 rounded-md bg-gray-100 text-lg w-full mb-2"
       />
