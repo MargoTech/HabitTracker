@@ -37,8 +37,8 @@ const HabitTracker = () => {
   const completedCount = habits.filter((habit) => habit.completed).length;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500">
-      <h1 className="text-4xl font-semibold text-center text-blue-600 mb-6">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 via-blue-300 to-blue-700 dark:bg-gray-900 dark:text-white transition-colors duration-300">
+      <h1 className="text-4xl font-semibold text-center text-white-600 mb-6">
         Habit Tracker
       </h1>
 
