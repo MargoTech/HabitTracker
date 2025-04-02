@@ -19,7 +19,7 @@ const DarkModeToggle = () => {
     <div className="flex flex-col items-center w-full max-w-md">
       <button
         onClick={() => setDarkMode(!darkMode)}
-        className="p-2 mt-4 text-lg bg-gray-200 dark:bg-gray-800 dark:text-white rounded-md"
+        className="absolute top-4 right-4 p-2 rounded text-lg bg-gray-200 dark:bg-gray-800 dark:text-white rounded-md"
       >
         {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
       </button>
