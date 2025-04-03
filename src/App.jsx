@@ -3,7 +3,7 @@ import DarkModeToggle from "./components/DarkModeToggle";
 
 function App() {
   return (
-    <div className="bg-white text-black dark:bg-gray-900 dark:text-white">
+    <div className="relative bg-white dark:bg-gray-900 transition-colors">
       <DarkModeToggle />
       <HabitTracker />
     </div>

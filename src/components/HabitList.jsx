@@ -1,25 +1,27 @@
+import { motion, AnimatePresence } from "framer-motion";
 import HabitItem from "./HabitItem";
 
 const HabitList = ({ habits, toggleHabitComplete, handleDeleteHabit }) => {
   return (
-    <ul className="mt-4 w-full max-w-lg">
-      {habits.map((habit) => (
-        <motion.div
-          key={habit.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.4 }}
-        >
-          <HabitItem
+    <AnimatePresence>
+      <ul className="mt-4 w-full max-w-lg">
+        {habits.map((habit) => (
+          <motion.li
             key={habit.id}
-            habit={habit}
-            toggleHabitComplete={toggleHabitComplete}
-            handleDeleteHabit={handleDeleteHabit}
-          />
-        </motion.div>
-      ))}
-    </ul>
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <HabitItem
+              key={habit.id}
+              habit={habit}
+              toggleHabitComplete={toggleHabitComplete}
+              handleDeleteHabit={handleDeleteHabit}
+            />
+          </motion.li>
+        ))}
+      </ul>
+    </AnimatePresence>
   );
 };
 
