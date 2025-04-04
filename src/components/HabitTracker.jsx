@@ -3,13 +3,16 @@ import HabitForm from "./HabitForm";
 import HabitList from "./HabitList";
 
 const HabitTracker = () => {
-  const [habits, setHabits] = useState([]);
-  const [habitTitle, setHabitTitle] = useState("");
+  const [habits, setHabits] = useState(() => {
+    const saved = localStorage.getItem("habits");
+    try {
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
-  useEffect(() => {
-    const savedHabits = JSON.parse(localStorage.getItem("habits"));
-    if (savedHabits) setHabits(savedHabits);
-  }, []);
+  const [habitTitle, setHabitTitle] = useState("");
 
   useEffect(() => {
     localStorage.setItem("habits", JSON.stringify(habits));
@@ -17,7 +20,11 @@ const HabitTracker = () => {
 
   const handleAddHabit = () => {
     if (!habitTitle.trim()) return;
-    const newHabit = { id: Date.now(), title: habitTitle, completed: false };
+    const newHabit = {
+      id: Date.now(),
+      title: habitTitle,
+      completed: false,
+    };
     setHabits([...habits, newHabit]);
     setHabitTitle("");
   };
@@ -37,8 +44,12 @@ const HabitTracker = () => {
   const completedCount = habits.filter((habit) => habit.completed).length;
 
   return (
-    <div className="flex flex-col items-center justify-center py-10 bg-gradient-to-r from-blue-500 via-blue-300 to-blue-700 dark:bg-gray-800 dark:text-white transition-colors duration-300">
-      <h1 className="text-4xl font-semibold text-center text-white-600 mb-6">
+    <div
+      className="flex flex-col items-center justify-center py-10 
+      bg-gradient-to-r from-blue-400 via-blue-200 to-blue-500 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700
+      transition-colors duration-500 min-h-screen w-full"
+    >
+      <h1 className="text-4xl font-semibold text-center text-gray-900 dark:text-gray-200 mb-6">
         Habit Tracker
       </h1>
 
@@ -48,14 +59,14 @@ const HabitTracker = () => {
         handleAddHabit={handleAddHabit}
       />
 
-      <div className="w-full bg-gray-200 rounded-md overflow-hidden mt-2">
+      <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-md overflow-hidden mt-2">
         <div
-          className="bg-blue-500 h-4 transition-all"
+          className="bg-blue-500 dark:bg-blue-700 h-4 transition-all"
           style={{ width: `${(completedCount / (habits.length || 1)) * 100}%` }}
         ></div>
       </div>
 
-      <p className="mt-2">
+      <p className="mt-2 text-gray-800 dark:text-gray-300">
         Completed {completedCount} from {habits.length}
       </p>
 
