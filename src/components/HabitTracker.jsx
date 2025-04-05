@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import HabitForm from "./HabitForm";
 import HabitList from "./HabitList";
+import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { db } from "./firebaseConfig";
+
 
 const HabitTracker = () => {
   const [habits, setHabits] = useState(() => {
