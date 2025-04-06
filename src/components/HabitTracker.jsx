@@ -1,11 +1,19 @@
 import { useState, useEffect } from "react";
 import HabitForm from "./HabitForm";
 import HabitList from "./HabitList";
-import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { db } from "./firebaseConfig";
-
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+  onSnapshot,
+} from "firebase/firestore";
+import { db } from "../firebaseConfig";
 
 const HabitTracker = () => {
+  const habitsCollection = collection(db, "habits");
+
   const [habits, setHabits] = useState(() => {
     const saved = localStorage.getItem("habits");
     try {
@@ -18,30 +26,42 @@ const HabitTracker = () => {
   const [habitTitle, setHabitTitle] = useState("");
 
   useEffect(() => {
+    const unsubscribe = onSnapshot(habitsCollection, (snapshot) => {
+      const firebaseHabits = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setHabits(firebaseHabits);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem("habits", JSON.stringify(habits));
   }, [habits]);
 
-  const handleAddHabit = () => {
+  const handleAddHabit = async () => {
     if (!habitTitle.trim()) return;
-    const newHabit = {
-      id: Date.now(),
+
+    await addDoc(habitsCollection, {
       title: habitTitle,
       completed: false,
-    };
-    setHabits([...habits, newHabit]);
+    });
+
     setHabitTitle("");
   };
 
-  const toggleHabitComplete = (id) => {
-    setHabits(
-      habits.map((habit) =>
-        habit.id === id ? { ...habit, completed: !habit.completed } : habit
-      )
-    );
+  const toggleHabitComplete = async (id, currentStatus) => {
+    const habitRef = doc(db, "habits", id);
+    await updateDoc(habitRef, {
+      completed: !currentStatus,
+    });
   };
 
-  const handleDeleteHabit = (id) => {
-    setHabits(habits.filter((habit) => habit.id !== id));
+  const handleDeleteHabit = async (id) => {
+    const habitRef = doc(db, "habits", id);
+    await deleteDoc(habitRef);
   };
 
   const completedCount = habits.filter((habit) => habit.completed).length;
