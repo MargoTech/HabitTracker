@@ -14,15 +14,7 @@ import { db } from "../firebaseConfig";
 const HabitTracker = () => {
   const habitsCollection = collection(db, "habits");
 
-  const [habits, setHabits] = useState(() => {
-    const saved = localStorage.getItem("habits");
-    try {
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
+  const [habits, setHabits] = useState([]);
   const [habitTitle, setHabitTitle] = useState("");
 
   useEffect(() => {
@@ -37,19 +29,18 @@ const HabitTracker = () => {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("habits", JSON.stringify(habits));
-  }, [habits]);
-
   const handleAddHabit = async () => {
     if (!habitTitle.trim()) return;
 
-    await addDoc(habitsCollection, {
-      title: habitTitle,
-      completed: false,
-    });
-
-    setHabitTitle("");
+    try {
+      await addDoc(habitsCollection, {
+        title: habitTitle,
+        completed: false,
+      });
+      setHabitTitle("");
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
   };
 
   const toggleHabitComplete = async (id, currentStatus) => {
